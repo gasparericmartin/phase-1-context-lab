@@ -1,13 +1,64 @@
-/* Your Code Here */
+function createEmployeeRecord(array) {
+    const newEmployee = {}
+    
+    newEmployee.firstName = array[0]
+    newEmployee.familyName = array[1]
+    newEmployee.title = array[2]
+    newEmployee.payPerHour = array[3]
+    newEmployee.timeInEvents = []
+    newEmployee.timeOutEvents = []
 
-/*
- We're giving you this function. Take a look at it, you might see some usage
- that's new and different. That's because we're avoiding a well-known, but
- sneaky bug that we'll cover in the next few lessons!
+    return newEmployee
+}
 
- As a result, the lessons for this function will pass *and* it will be available
- for you to use if you need it!
- */
+function createEmployeeRecords(array) {
+    return array.map(createEmployeeRecord)
+}
+
+function createTimeInEvent(date) {
+    const newObject = {}
+
+    newObject.type = 'TimeIn'
+    newObject.hour = parseInt(date.slice(-4, -2) + '00')
+    newObject.date = date.slice(0, 10)
+
+    this.timeInEvents.push(newObject)
+    return this
+}
+
+function createTimeOutEvent(date) {
+    const newObject = {}
+
+    newObject.type = 'TimeOut'
+    newObject.hour = parseInt(date.slice(-4, -2) + '00')
+    newObject.date = date.slice(0, 10)
+
+    this.timeOutEvents.push(newObject)
+    return this
+}
+
+function hoursWorkedOnDate(date) {
+    let timeIn = 0
+    let timeOut = 0
+    
+    this.timeInEvents.forEach(element => {
+        if (element.date === date) {
+            timeIn = element.hour
+        }
+    })
+    
+    this.timeOutEvents.forEach(element => {
+        if (element.date === date) {
+            timeOut = element.hour
+        }
+    })
+
+    return (timeOut - timeIn) * .01
+}
+
+function wagesEarnedOnDate(date) {
+    return hoursWorkedOnDate.call(this, date) * this.payPerHour
+}
 
 const allWagesFor = function () {
     const eligibleDates = this.timeInEvents.map(function (e) {
@@ -21,3 +72,19 @@ const allWagesFor = function () {
     return payable
 }
 
+function findEmployeeByFirstName(srcArray, firstName) {
+    let holder = 0
+    srcArray.forEach(element => {
+        if (element.firstName === firstName) {
+          holder = element
+          
+        }
+    })
+    return holder
+}
+
+function calculatePayroll(array) {
+    return array.reduce(
+        (acc, e) => acc + allWagesFor.call(e), 0
+    )
+}
